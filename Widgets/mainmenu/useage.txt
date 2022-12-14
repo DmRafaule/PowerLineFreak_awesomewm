@@ -1,0 +1,6 @@
+For entering into mainmenu type super+tab
+
+For add in new app in mainmenu widget
+1) Download icon for this app
+2) Name it as if it will calle from terminal
+
