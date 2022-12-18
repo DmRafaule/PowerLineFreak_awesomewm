@@ -10,40 +10,24 @@ local user_var = dofile(gfs.get_configuration_dir() .. "Theme/user_var.lua")
 
 
 local taglist_buttons = gears.table.join(
-                    awful.button({ }, 1, function(t) t:view_only() end),
-                    awful.button({ modkey }, 1, function(t)
-                                              if client.focus then
-                                                  client.focus:move_to_tag(t)
-                                              end
-                                          end),
-                    awful.button({ }, 3, awful.tag.viewtoggle),
-                    awful.button({ modkey }, 3, function(t)
-                                              if client.focus then
-                                                  client.focus:toggle_tag(t)
-                                              end
-                                          end),
-                    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
-                    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
-                    )
+    awful.button({ }, 1, function(t) t:view_only() end),
+    awful.button({ modkey }, 1, function(t)
+                              if client.focus then
+                                  client.focus:move_to_tag(t)
+                              end
+                          end),
+    awful.button({ }, 3, awful.tag.viewtoggle),
+    awful.button({ modkey }, 3, function(t)
+                              if client.focus then
+                                  client.focus:toggle_tag(t)
+                              end
+                          end),
+    awful.button({ }, 4, function(t) awful.tag.viewnext(t.screen) end),
+    awful.button({ }, 5, function(t) awful.tag.viewprev(t.screen) end)
+)
 
-
-awful.screen.connect_for_each_screen(function(s)
-
- -- Create a taglist widget
-    awful.tag.add("Coding", {
-        --icon               = user_var.awesome_icon,
-        layout             = awful.layout.suit.tile,
-        master_fill_policy = "expand",
-        screen             = s,
-        selected           = true,
-    })
-    awful.tag.add("Exploration", {
-        layout = awful.layout.suit.floating,
-        screen = s,
-    })
-
-    s.mytaglist = awful.widget.taglist {
-    screen  = s,
+local mytaglist = awful.widget.taglist {
+    screen  = awful.screen.focused(),
     filter  = awful.widget.taglist.filter.all,
     style   = {
         shape = gears.shape.powerline,
@@ -103,4 +87,36 @@ awful.screen.connect_for_each_screen(function(s)
     buttons = taglist_buttons
 }
 
+awful.screen.connect_for_each_screen(function(s)
+ -- Create a taglist widget
+    awful.tag.add("Coding", {
+        --icon               = user_var.awesome_icon,
+        layout             = awful.layout.suit.tile,
+        master_fill_policy = "expand",
+        screen             = s,
+        selected           = true,
+    })
+    awful.tag.add("Exploration", {
+        layout = awful.layout.suit.floating,
+        screen = s,
+    })
 end)
+
+local _M = wibox.widget({
+    -- Force the textbox to always be 300 pixel long
+    {
+        {
+            markup = "<b>               </b>",
+            align  = "left",
+            widget = mytaglist,
+        },
+        shape = gears.shape.rect,
+        widget = wibox.container.background,
+    },
+    width    = 300,
+    left = -20,
+    strategy = "min",
+    layout   = wibox.container.margin,
+})
+
+return _M

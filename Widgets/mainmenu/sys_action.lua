@@ -2,27 +2,12 @@ local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
 local user_var = require("Theme.user_var")
+require("Widgets.mainmenu.common")
 
-local _M = wibox.widget({
-    -- Quit
-    {
-        {
-            {
-                image  = user_var.quit_icon,
-                resize = true,
-                widget = wibox.widget.imagebox
-            },
-            halign = 'center',
-            widget = wibox.container.place
-        },
-        bg = user_var.time_b,
-        shape = gears.shape.rectangular_tag,
-        id = 'quit',
-        forced_width = 75,
-        widget = wibox.container.background
-    },
-    -- Reboot
-    {
+
+
+-- Reboot (Just widget button)
+RebootW = wibox.widget{
         {
             {
                 image  = user_var.reboot_icon,
@@ -37,9 +22,9 @@ local _M = wibox.widget({
         id = 'reboot',
         forced_width = 75,
         widget = wibox.container.background
-    },
-    -- Shutdown
-    {
+}
+-- Shutdown (Just widget button)
+ShutdownW = wibox.widget{
         {
             {
                 image  = user_var.shutdown_icon,
@@ -54,27 +39,39 @@ local _M = wibox.widget({
         id = 'shutdown',
         forced_width = 75,
         widget = wibox.container.background
+}
+-- (Just widget button)
+SysActionW = wibox.widget({
+    {
+        {
+            image  = user_var.arch,
+            resize = true,
+            widget = wibox.widget.imagebox
+        },
+        halign = 'center',
+        widget = wibox.container.place
     },
-    spacing = -15,
-    layout = wibox.layout.fixed.horizontal
+    bg = user_var.time_b,
+    shape = gears.shape.rectangular_tag,
+    forced_width = 75,
+    id = 'main_but',
+    widget = wibox.container.background
 })
 
 
-_M:get_children_by_id('quit')[1]:connect_signal('mouse::enter', function (c) c:set_bg(user_var.time_b_hovered) end)
-_M:get_children_by_id('quit')[1]:connect_signal('mouse::leave', function (c) c:set_bg(user_var.time_b) end)
-_M:get_children_by_id('quit')[1]:connect_signal('button::press', function (c) 
-    awesome.quit()
-end)
-_M:get_children_by_id('reboot')[1]:connect_signal('mouse::enter', function (c) c:set_bg(user_var.time_b_hovered) end)
-_M:get_children_by_id('reboot')[1]:connect_signal('mouse::leave', function (c) c:set_bg(user_var.time_b) end)
-_M:get_children_by_id('reboot')[1]:connect_signal('button::press', function (c) 
+RebootW:connect_signal('mouse::enter', function (c) c:set_bg(user_var.time_b_hovered) end)
+RebootW:connect_signal('mouse::leave', function (c) c:set_bg(user_var.time_b) end)
+RebootW:connect_signal('button::press', function (c) 
     awful.spawn.with_shell("reboot")
 end)
-_M:get_children_by_id('shutdown')[1]:connect_signal('mouse::enter', function (c) c:set_bg(user_var.time_b_hovered) end)
-_M:get_children_by_id('shutdown')[1]:connect_signal('mouse::leave', function (c) c:set_bg(user_var.time_b) end)
-_M:get_children_by_id('shutdown')[1]:connect_signal('button::press', function (c) 
+ShutdownW:connect_signal('mouse::enter', function (c) c:set_bg(user_var.time_b_hovered) end)
+ShutdownW:connect_signal('mouse::leave', function (c) c:set_bg(user_var.time_b) end)
+ShutdownW:connect_signal('button::press', function (c) 
     awful.spawn.with_shell("shutdown now")
 end)
 
-
-return _M
+SysActionW:connect_signal('mouse::enter',function(c) c:set_bg(user_var.time_b_hovered) end)
+SysActionW:connect_signal("mouse::leave", function(c) c:set_bg(user_var.time_b) end)
+SysActionW:connect_signal("button::press", function ()
+    MainMenu_Switcher("sys") 
+end)

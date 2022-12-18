@@ -1,5 +1,8 @@
 local awful = require("awful")
 local gears = require("gears")
+local wibox = require("wibox")
+local user_var = require("Theme.user_var")
+
 -- Table of layouts to cover with awful.layout.inc, order matters.
 awful.layout.layouts = {
     awful.layout.suit.max,
@@ -20,11 +23,18 @@ awful.layout.layouts = {
     --awful.layout.suit.corner.se,
 }
 
-local layout
-
-awful.screen.connect_for_each_screen(function(s)
-  layout = awful.widget.layoutbox(s)
-end)
+local layout = wibox.widget({
+      {
+          awful.widget.layoutbox(),
+          halign = 'right',
+          widget = wibox.container.place
+      },
+      bg = user_var.time_b,
+      shape = gears.shape.rectangular_tag,
+      forced_width = 25,
+      id = 'main',
+      widget = wibox.container.background
+  })
 
 layout:buttons(gears.table.join(
                            awful.button({ }, 1, function () awful.layout.inc( 1) end),

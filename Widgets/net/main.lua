@@ -1,6 +1,3 @@
--- Standard awesome library
-local awful = require("awful")
-require("awful.autofocus")
 local wibox = require("wibox")
 local user_var = require("Theme.user_var")
 local gears = require("gears")

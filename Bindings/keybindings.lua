@@ -3,11 +3,26 @@ local awful = require("awful")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
 local gfs = require("gears.filesystem")
 local user_var = dofile(gfs.get_configuration_dir() .. "Theme/user_var.lua")
-local kl = require("Widgets.keyboard_layout.kl")
+local kl = require("Widgets.keyboard_layout.kbdcfg")
 local modkey = user_var.modkey
+local timeW = require("Widgets.time.timeWidget")
+local klW = require("Widgets.keyboard_layout.kl")
+local systrayW = require("Widgets.systray.systrayWidget")
+local layoutBoxW = require("Widgets.work_layout.layoutWidget")
+local batteryW = require("Widgets.battery.battery")
+local volumeW = require("Widgets.volume.main")
+local brightnessW = require("Widgets.brightness.main")
+local net = require("Widgets.net.main")
+local runPromtW = require("Widgets.prompt.promptWidget")
+local tasklistW = require("Widgets.tasklist.tasklistWidget")
+local taglistW = require("Widgets.taglist.taglistWidget")
+require("Widgets.panel.panel_powerline")
 require("Widgets.mainmenu.apps")
+require("Widgets.mainmenu.sys_action")
+require("Widgets.mainmenu.settings")
 require("awful.hotkeys_popup.keys")
 require("awful.autofocus")
+
 
 
 -- Mouse bindings
@@ -74,7 +89,6 @@ globalkeys = gears.table.join(
       end,
       {description = "run app", group = "client"}
     ),
-    -- Prev app
 
 	  -- Changing keyboard layout
     awful.key({"Shift"}, "Alt_L",
@@ -87,27 +101,44 @@ globalkeys = gears.table.join(
         awful.screen.connect_for_each_screen(function (s)
           if s.main_wibox.visible then
             s.main_wibox.visible = false
-            s.mainmenu.visible = false
-            s.rightwibar.visible = false
           else
             s.main_wibox.visible = true
-            s.mainmenu.visible = false
-            s.rightwibar.visible = true
           end
         end)
       end,
       {description= "showup wibar menu",group = "client"}),
+    -- Switcher between mainmenuW and statusmenuW
     awful.key({modkey},           "Tab",
       function ()
-        awful.screen.connect_for_each_screen(function (s)
-          if (s.mainmenu.visible) then
-            s.mainmenu.visible = false
-            s.rightwibar.visible = true
-          else
-            s.mainmenu.visible = true
-            s.rightwibar.visible = false
-          end
-        end)
+        if StatusmenuW.isSwitched == false then
+          StatusmenuW.widget:remove_widgets(systrayW)
+          StatusmenuW.widget:remove_widgets(klW)
+          StatusmenuW.widget:remove_widgets(net)
+          StatusmenuW.widget:remove_widgets(brightnessW)
+          StatusmenuW.widget:remove_widgets(volumeW)
+          StatusmenuW.widget:remove_widgets(batteryW)
+          StatusmenuW.widget:remove_widgets(timeW)
+          StatusmenuW.widget:remove_widgets(layoutBoxW)
+          MainMenu_Clear()
+          StatusmenuW.widget:insert(4,AppsW)
+          StatusmenuW.widget:insert(5,SettingsW)
+          StatusmenuW.widget:insert(6,SysActionW)
+          StatusmenuW.isSwitched = true        
+        else
+          MainMenu_Clear()
+          StatusmenuW.widget:remove_widgets(AppsW)
+          StatusmenuW.widget:remove_widgets(SettingsW)
+          StatusmenuW.widget:remove_widgets(SysActionW)
+          StatusmenuW.widget:insert(4,systrayW)
+          StatusmenuW.widget:insert(5,klW)
+          StatusmenuW.widget:insert(6,net)
+          StatusmenuW.widget:insert(7,brightnessW)
+          StatusmenuW.widget:insert(8,volumeW)
+          StatusmenuW.widget:insert(9,batteryW)
+          StatusmenuW.widget:insert(10,timeW)
+          StatusmenuW.widget:insert(11,layoutBoxW)
+          StatusmenuW.isSwitched = false        
+        end
       end,
       {description = "Open main launcher", group = "launcher"}
     ),
@@ -140,19 +171,21 @@ globalkeys = gears.table.join(
         end
       end,
       {description = "restore minimized", group = "client"}),
-    -- Prompt
+    -- Runprompt - tags and task switcher
     awful.key({ modkey },            "r",
       function()
-        awful.screen.connect_for_each_screen(function (s)
-          if s.prompt_wibox.visible then
-            s.leftwibar.visible = true
-            s.prompt_wibox.visible = false
-          else
-            s.leftwibar.visible = false
-            s.prompt_wibox.visible = true
-            s.prompt_wibox.widget:run()
-          end
-        end)
+        if NavigationmenuW.isSwitched == false then
+          NavigationmenuW.widget:insert(1,runPromtW)
+          NavigationmenuW.widget:remove_widgets(taglistW)
+          NavigationmenuW.widget:remove_widgets(tasklistW)
+          NavigationmenuW.isSwitched = true
+          Run_prompt()
+        else
+          NavigationmenuW.widget:remove_widgets(runPromtW)
+          NavigationmenuW.widget:insert(1,taglistW)
+          NavigationmenuW.widget:insert(2,tasklistW)
+          NavigationmenuW.isSwitched = false
+        end
       end,
       {description = "run prompt", group = "launcher"})
 )

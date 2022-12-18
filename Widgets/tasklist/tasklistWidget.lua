@@ -29,9 +29,9 @@ local tasklist_buttons = gears.table.join(
                                               awful.client.focus.byidx(-1)
                                           end))
 
-awful.screen.connect_for_each_screen(function(s)
-s.mytasklist = awful.widget.tasklist {
-    screen   = s,
+
+local mytasklist = awful.widget.tasklist {
+    screen   = awful.screen.focused(),
     filter   = awful.widget.tasklist.filter.currenttags,
     buttons  = tasklist_buttons,
     style    = {
@@ -81,5 +81,18 @@ s.mytasklist = awful.widget.tasklist {
         widget = wibox.container.background,
     },
 }
-end
-)
+                                    
+local _M = wibox.widget({
+    {
+        {
+            markup = "<b></b>",
+            widget = mytasklist
+        },
+        shape = gears.shape.powerline,
+        widget = wibox.container.background
+    },
+    left   = -10,
+    layout = wibox.container.margin
+})
+
+return _M
