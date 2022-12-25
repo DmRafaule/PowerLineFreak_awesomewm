@@ -90,8 +90,11 @@ local _M = {
 	-- Main menu widget
 	mm_b = "#20212459",
 	mm_brd = "#8070d9",
-  app_selected = "#1f33afdd",
-  app_still = "#683fabce",
-  app_hoverd = "#666d11",
+  	app_selected = "#1f33afdd",
+  	app_still = "#683fabce",
+  	app_hoverd = "#666d11",
+	-- Battery 
+	discharging = gfs.get_configuration_dir().. "Pictures/Icons/discharging.png",
+	charging = gfs.get_configuration_dir().. "Pictures/Icons/charging.png",
 }
 return _M

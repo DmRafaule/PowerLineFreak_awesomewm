@@ -3,6 +3,7 @@ local wibox = require("wibox")
 local gears = require("gears")
 local watch = require("awful.widget.watch")
 local naughty = require("naughty")
+local user_var= require("Theme.user_var")
 local timeout = 5
 
 local chargeTextW = wibox.widget({
@@ -10,6 +11,18 @@ local chargeTextW = wibox.widget({
   valign = 'center',
   widget = wibox.widget.textbox()
 })
+local charge_s = wibox.widget{
+  {
+    {
+      image = user_var.discharging,
+      resize = true,
+      widget = wibox.widget.imagebox,
+    },
+    direction = "east",
+    layout = wibox.container.rotate
+  },
+  layout = wibox.container.place
+}
 local progressBarW = wibox.widget({
   max_value     = 100,
   value         = 0,
@@ -28,6 +41,7 @@ local progressBarW = wibox.widget({
 -- stack of progressbar and charge text
 local la = wibox.widget({
     progressBarW,
+    charge_s,
     layout  = wibox.layout.stack
 })
 -- Container defining background, shape, position
@@ -43,10 +57,10 @@ _M = wibox.widget({
   widget = wibox.container.background
 })
 _M:connect_signal("mouse::enter",function (c)
-  la:insert(2,chargeTextW)
+  la:insert(3,chargeTextW)
 end)
 _M:connect_signal("mouse::leave",function (c)
-  la:remove(2,chargeTextW)
+  la:remove(3,chargeTextW)
 end)
 
 -- Because I don't want to reimplement whole progressbar widget
@@ -87,6 +101,11 @@ watch("acpi -i",timeout,function (widget,stdout)
           charge = charge + batt.charge * capacities[i]
       end
   end
+  if status == "Discharging" then
+    charge_s:get_all_children()[2].image = user_var.discharging
+  else
+    charge_s:get_all_children()[2].image = user_var.charging
+  end
   charge = charge / capacity
   local charge_str = tostring(charge):sub(1,#tostring(charge)-2)
   local color  = ""
@@ -97,7 +116,7 @@ watch("acpi -i",timeout,function (widget,stdout)
     _M.fg = thm.font_color_dark
   elseif charge < 75 and charge >= 50 then
     color = thm.batt_proggress_barr_75_50
-    _M.fg = thm.font_color_dark
+    _M.fg = thm.font_color_light
   elseif charge < 50 and charge >= 25 then
     color = thm.batt_proggress_barr_50_25
     _M.fg = thm.font_color_light

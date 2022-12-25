@@ -1,4 +1,5 @@
 local awful = require("awful")
+local gears = require("gears")
 require("awful.autofocus")
 -- Theme handling library
 local beautiful = require("beautiful")
@@ -20,6 +21,18 @@ client.connect_signal("manage", function (c)
     --    gears.shape.rounded_rect(cr,width,height,20)
     --end
 end)
+
+screen.connect_signal("property::geometry", function (s)
+    if beautiful.wallpaper then
+        local wallpaper = beautiful.wallpaper
+        -- If wallpaper is a function, call it with the screen
+        if type(wallpaper) == "function" then
+            wallpaper = wallpaper(s)
+        end
+        gears.wallpaper.maximized(wallpaper, s, true)
+    end
+end
+)
 
 -- Enable sloppy focus, so that focus follows mouse.
 client.connect_signal("mouse::enter", function(c)

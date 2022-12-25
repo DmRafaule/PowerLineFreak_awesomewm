@@ -173,7 +173,7 @@ local mypromptbox = awful.widget.prompt({ -- Move to Widgets
 
 local _M = wibox.widget{
   {
-    mypromptbox.widget,
+    mypromptbox,
     halign = 'center',
     widget = wibox.container.place
   },
