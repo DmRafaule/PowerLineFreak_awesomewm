@@ -93,8 +93,5 @@ local _M = {
   	app_selected = "#1f33afdd",
   	app_still = "#683fabce",
   	app_hoverd = "#666d11",
-	-- Battery 
-	discharging = gfs.get_configuration_dir().. "Pictures/Icons/discharging.png",
-	charging = gfs.get_configuration_dir().. "Pictures/Icons/charging.png",
 }
 return _M

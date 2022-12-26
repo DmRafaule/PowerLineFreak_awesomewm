@@ -1,3 +1,4 @@
+require("Utils.widgets")
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
@@ -8,7 +9,7 @@ local timeW = require("Widgets.time.timeWidget")
 local kl = require("Widgets.keyboard_layout.kl")
 local systrayW = require("Widgets.systray.systrayWidget")
 local layoutBoxW = require("Widgets.work_layout.layoutWidget")
-local batteryW = require("Widgets.battery.battery")
+local batteryW = require("Widgets.battery.main")
 local volumeW = require("Widgets.volume.main")
 local brightnessW = require("Widgets.brightness.main")
 local net = require("Widgets.net.main")
@@ -21,24 +22,13 @@ beautiful.init(gears.filesystem.get_configuration_dir().."Theme/theme.lua")
 
 
 -- TODO  
--- 2) Rewrite all signals into files under widget folder()
 -- 3) Rewrite brightness w
 -- 4) Rewrite sound volume w
 -- 5) Rewrite net w
 -- 6) SystrayW does not work correctly. Exited apps does not dissapear after quitin
+-- 7) runPromtW does not show textbox
 
-local gap = wibox.widget({
-    {
-        markup = '<b></b>',
-        widget = wibox.widget.textbox
-    },
-    bg = user_var.layout_b..'00',
-    shape = gears.shape.transform(gears.shape.powerline)
-                : scale(-1,1)
-                    : translate(-35,0),
-    forced_width = 35,
-    widget = wibox.container.background
-})
+
 local arrow = wibox.widget({
     {
         markup = '<b></b>',
@@ -56,7 +46,6 @@ local gap_expandW = wibox.widget({
 })
 
 dofile(gfs.get_configuration_dir() .. "Widgets/prompt/promptWidget.lua")
---dofile(gfs.get_configuration_dir() .. "Widgets/mainmenu/mainmenuWidget.lua")
 
 -- Till panel_powerline not returning anything, it for debuging purposed will be global
 NavigationmenuW = {
@@ -71,9 +60,9 @@ NavigationmenuW = {
 StatusmenuW = {
     widget = wibox.widget{
       arrow,
-      gap,
+      SetGap(35),
       systrayW,
-      gap,
+      SetGap(35),
       kl,
       net,
       brightnessW,

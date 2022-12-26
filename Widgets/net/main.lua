@@ -1,18 +1,34 @@
 local wibox = require("wibox")
-local user_var = require("Theme.user_var")
+local colors = require("Theme.colors")
+local icons = require("Theme.icons")
 local gears = require("gears")
 
 
-local _M = wibox.widget({
+local net_s = wibox.widget{
     {
-        halign = 'center',
-        widget = wibox.container.place
+        image = icons.connected_via_wifi,
+        resize = true,
+        forced_height = 25,
+        forced_width = 25,
+        widget = wibox.widget.imagebox,
     },
-    bg = user_var.widget_b,
+    layout = wibox.container.place
+}
+local la = wibox.widget{
+    net_s,
+    halign = 'center',
+    widget = wibox.container.place
+}
+
+local _M = wibox.widget({
+    la,
+    bg = colors.net_background,
+    shape_border_color = colors.net_borders,
+    shape_border_width = 4,
     shape = gears.shape.transform(gears.shape.powerline) 
                 : scale(-1,1)
-                    : translate(-50,0),
-    forced_width = 50,
+                    : translate(-60,0),
+    forced_width = 60,
     id = 'sett',
     widget = wibox.container.background
 })
