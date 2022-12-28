@@ -3,7 +3,7 @@ local icons = require("Theme.icons")
 local wibox = require("wibox")
 local gears = require("gears")
 local watch = require("awful.widget.watch")
-local timeout = 5
+local timeout = 1
 
 local chargeTextW = wibox.widget({
   align  = 'center',
@@ -49,7 +49,7 @@ local la = wibox.widget({
 _M = wibox.widget({
   la,
   bg = thm.batt_background,
-  fg = thm.font_color_dark,
+  fg = thm.font_color_light,
   shape = gears.shape.transform(gears.shape.powerline)
               : scale(-1,1)
                   : translate(-75,0),
@@ -110,20 +110,16 @@ watch("acpi -i",timeout,function (widget,stdout)
   charge = charge / capacity
   local charge_str = tostring(charge):sub(1,#tostring(charge)-2)
   local color  = ""
-  chargeTextW.markup = "<i><b>"..charge_str.."%</b></i>"
+  chargeTextW.markup = charge_str..'%'
   progressBarW.value = charge * (max/100) + min
   if (charge >= 75) then
     color = thm.batt_proggress_barr_100_75
-    _M.fg = thm.font_color_dark
   elseif charge < 75 and charge >= 50 then
     color = thm.batt_proggress_barr_75_50
-    _M.fg = thm.font_color_light
   elseif charge < 50 and charge >= 25 then
     color = thm.batt_proggress_barr_50_25
-    _M.fg = thm.font_color_light
   else
     color = thm.batt_proggress_barr_25_00
-    _M.fg = thm.font_color_light
   end
   progressBarW.color = color
 end)
