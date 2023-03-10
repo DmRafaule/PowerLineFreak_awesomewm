@@ -2,10 +2,8 @@ local wibox = require("wibox")
 local colors = require("Theme.colors")
 local icons = require("Theme.icons")
 local gears = require("gears")
-local watch = require("awful.widget.watch")
 local gfs = require("gears.filesystem")
-
-local timeout = 1
+require("Utils.cli")
 
 local textW = wibox.widget{
     align  = 'center',
@@ -44,9 +42,8 @@ _M:connect_signal("mouse::leave",function (c)
   la:remove(2,textW)
 end)
 
-
-watch("xbacklight -get",timeout,function (widget,stdout)
-  local level = tonumber(stdout)
+function UpdateBrightness()
+  local level = tonumber(Capture("xbacklight -get",true))
   textW.markup = tostring(level)..'%'
   local confDir = gfs.get_configuration_dir()
   for i=1,12,1 do
@@ -57,6 +54,6 @@ watch("xbacklight -get",timeout,function (widget,stdout)
       brightness_s:get_all_children()[1].image = confDir .."Pictures/Icons/brightness"..tostring(res)..".png" 
     end
   end
-end)
-
+end
+UpdateBrightness()
 return _M

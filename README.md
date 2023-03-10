@@ -1,9 +1,6 @@
 # Fork-AwesomeWM
 
 This is a my custom config for awesome wm. 
-* external_folder <- *Not mine. Others projects*
-* external_folder
-* external_folder
 * Pictures
     * Icons <- all other icons exept for apps
     * Apps <- where apps icon can be found
@@ -16,44 +13,39 @@ This is a my custom config for awesome wm.
 * Widgets <- *All used widgets*
 * rc.lua <- *Main*
 * README.md <- *This file*
+* TODO.md <- *Contain all future features*
 
 ## Dependencies
 In all cases it will be for widgets
-### Widgets/charge
+### battery
 * **acpi** package
-### Widgets/keyboard_layout
+### keyboard_layout
 * None
-### Widgets/mainmenu
+### mainmenu
 * None
-### Widgets/panel
+### panel
 * None
-### Widgets/prompt 
+### prompt 
 * None
-### Widgets/systray
+### systray
 * None *I can't figure out how to make icons with transparent background. Rework required*
-### Widgets/taglist
+### taglist
 * None
-### Widgets/tasker
+### tasker
 * None (not in use)
-### Widgets/tasklist
+### tasklist
 * None
-### Widgets/time
+### time
 * None
-### Widgets/volume
-* **amixer**, **pacmd** packages
-### Widgets/windowbar
+### volume
+* **pulseaudio** packages
+### windowbar
 * None
-### Widgets/work_layout
+### work_layout
 * None
-
-For some of widgets I did not create separated file, for now.
-All of those widgets can be find in Widgets/panel
-Such as 
-### Brightness
+### brightness
 * xbacklight
 ### net_widget
-* None
-### calender
-* None
+* NetworkManager
 
 For now desktop is not supported.

@@ -2,7 +2,8 @@ local wibox = require("wibox")
 local colors = require("Theme.colors")
 local icons = require("Theme.icons")
 local gears = require("gears")
-
+--local watch = require("awful.watch")
+local timeout = 5
 
 local net_s = wibox.widget{
     {
@@ -32,5 +33,13 @@ local _M = wibox.widget({
     id = 'sett',
     widget = wibox.container.background
 })
+_M:connect_signal("button::press",function ()
+  
+end)
+
+
+--watch("nmcli",timeout,function(widget,stdout)
+--  
+--end)
 
 return _M

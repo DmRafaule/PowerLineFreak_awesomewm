@@ -4,8 +4,6 @@ thunar.png
 kitty.png
 galculator.png
 telegram-desktop.png
-geogebra.png
-logisim.png
 virt-manager.png
 nomacs.png
 xreader.png
@@ -14,5 +12,4 @@ cmake-gui.png
 libreoffice.png
 lxappearance.png
 qbittorrent.png
-circuitjs.png
 qv4l2.png

@@ -4,7 +4,7 @@ local _M = {
 	-- Default applications
 	browser = "firefox",
 	fm = "thunar",
-	editor = "code",
+	editor = "nvim",
 	terminal = "kitty",
 	-- Mod key (win in my case)
 	modkey = "Mod4",
@@ -42,7 +42,7 @@ local _M = {
 	work_layout_tile = gfs.get_configuration_dir().. "Pictures/Icons/tile.png",
 	work_layout_max = gfs.get_configuration_dir().. "Pictures/Icons/max.png",
 	-- Wallpapers
-	current_wallpaper = gfs.get_configuration_dir().. "Pictures/Wallpapers/painting/moonbehindmountain.jpg",
+	current_wallpaper = gfs.get_configuration_dir().. "Pictures/Wallpapers/minimalism/19.jpg",
 	-- Font 
 	font = "Sans 12",
 	-- Colors

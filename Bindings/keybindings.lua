@@ -155,7 +155,37 @@ globalkeys = gears.table.join(
     awful.key({ }, "Print", function ()
       awful.spawn.with_shell("scrot --file '/home/dima/Pictures/screenshot-%Y_%m_%d-%H_%M.png' -q 100")
     end),
-    awful.key({ modkey, "Control" }, "r", awesome.restart,
+    -- Mute 
+    awful.key({ nil }, "XF86AudioMute",
+      function ()
+        awful.spawn.with_shell("pactl set-sink-mute @DEFAULT_SINK@ toggle")
+        UpdateVolume()
+      end),
+    -- Volume up
+    awful.key({ nil }, "XF86AudioRaiseVolume",
+      function ()
+        awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ +5000")
+        UpdateVolume()
+      end),
+    -- Volume down
+    awful.key({ nil }, "XF86AudioLowerVolume",
+      function ()
+        awful.spawn.with_shell("pactl set-sink-volume @DEFAULT_SINK@ -5000")
+        UpdateVolume()
+      end),
+    -- Brightness up
+    awful.key({ nil }, "XF86MonBrightnessUp",
+      function ()
+        awful.spawn.with_shell("xbacklight -inc 10")
+        UpdateBrightness()
+      end),
+    -- Brightness down
+    awful.key({ nil }, "XF86MonBrightnessDown",
+      function ()
+        awful.spawn.with_shell("xbacklight -dec 10")
+        UpdateBrightness()
+      end),
+    awful.key({ nil }, "F5", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
     awful.key({ modkey,           }, "space", function () awful.layout.inc( 1)                end,
               {description = "select next", group = "layout"}),
@@ -193,22 +223,32 @@ globalkeys = gears.table.join(
 
 clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",
-        function (c)
-            c.fullscreen = not c.fullscreen
-            c:raise()
-        end,
-        {description = "toggle fullscreen", group = "client"}),
-    awful.key({ nil,   }, "F4",      function (c) c:kill()                         end,
-              {description = "close", group = "client"}),
-    awful.key({ modkey, "Control" }, "space",  awful.client.floating.toggle                     ,
-              {description = "toggle floating", group = "client"}),
+      function (c)
+          c.fullscreen = not c.fullscreen
+          c:raise()
+      end,
+      {description = "toggle fullscreen", group = "client"}
+    ),
+    -- This wierd key combination was get it by using xbindkeys --key and
+    -- then pressing button up above f4 key
+    awful.key({ "Alt",   }, "Alt_L",
+      function (c)
+        c:kill()
+      end,
+      {description = "close", group = "client"}
+    ),
+    awful.key({ modkey, "Control" }, "space",
+      awful.client.floating.toggle,
+      {description = "toggle floating", group = "client"}
+    ),
     awful.key({ modkey,           }, "n",
-        function (c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end ,
-        {description = "minimize", group = "client"})
+      function (c)
+          -- The client currently has the input focus, so it cannot be
+          -- minimized, since minimized clients can't have the focus.
+          c.minimized = true
+      end ,
+      {description = "minimize", group = "client"}
+    )
 )
 
 clientbuttons = gears.table.join(

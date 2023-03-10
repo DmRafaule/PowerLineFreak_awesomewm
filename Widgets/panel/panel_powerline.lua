@@ -21,12 +21,6 @@ local runPromtW = require("Widgets.prompt.promptWidget")
 beautiful.init(gears.filesystem.get_configuration_dir().."Theme/theme.lua")
 
 
--- TODO  
--- 3) Rewrite brightness w
--- 4) Rewrite sound volume w
--- 5) Rewrite net w
--- 6) SystrayW does not work correctly. Exited apps does not dissapear after quitin
--- 7) runPromtW does not show textbox
 
 
 local arrow = wibox.widget({

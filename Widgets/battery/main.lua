@@ -3,7 +3,7 @@ local icons = require("Theme.icons")
 local wibox = require("wibox")
 local gears = require("gears")
 local watch = require("awful.widget.watch")
-local timeout = 1
+local timeout = 5
 
 local chargeTextW = wibox.widget({
   align  = 'center',

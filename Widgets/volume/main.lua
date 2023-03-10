@@ -2,10 +2,8 @@ local wibox = require("wibox")
 local colors = require("Theme.colors")
 local icons = require("Theme.icons")
 local gears = require("gears")
-local watch = require("awful.widget.watch")
+require("Utils.cli")
 local naughty = require("naughty")
-
-local timeout = 1
 
 local textW = wibox.widget{
     align  = 'center',
@@ -59,51 +57,39 @@ _M:connect_signal("mouse::leave",function (c)
   la:remove(2,textW)
 end)
 
-local function capture(cmd, raw)
-  local handle = assert(io.popen(cmd, 'r'))
-  local output = assert(handle:read('*a'))
-  
-  handle:close()
-  
-  if raw then 
-      return output 
+function UpdateVolume()
+  local ismuted =  Capture("pacmd list-sinks | awk '/muted/ { print $2 }'",true)
+  local i = string.find(ismuted,"\n")
+  if i == nil then
+    i = 3
   end
- 
-  output = string.gsub(
-      string.gsub(
-          string.gsub(output, '^%s+', ''), 
-          '%s+$', 
-          ''
-      ), 
-      '[\n\r]+',
-      ' '
-  )
- 
- return output
-end
-
-
-watch("pacmd list-sinks",timeout,function (widget,stdout)
-  local ismuted =  capture("pacmd list-sinks | awk '/muted/ { print $2 }'",true)
-  local sound_level = capture("amixer get Master | egrep -o '[0-9]{1,3}%'",true)
-  local curr_icon
-  ismuted = string.sub(ismuted,1,3)
-  -- Changing volume num
-  for w in string.gmatch(sound_level,'[0-9]+')do
-    textW.markup = w..'%'
-    if tonumber(w) <= 100 and tonumber(w) > 66 then
-      curr_icon = icons.sound_high
-    elseif tonumber(w) <= 66 and tonumber(w) > 33 then
-      curr_icon = icons.sound_med
-    else
-      curr_icon = icons.sound_min
+  ismuted = string.sub(ismuted,1,i-1)
+  
+  if ismuted == "yes" then
+    volume_s:get_all_children()[1].image = icons.no_sound
+    local sound_level = Capture("amixer get Master | egrep -o '[0-9]{1,3}%'",true)
+    for w in string.gmatch(sound_level,'[0-9]+')do
+      textW.markup = w..'%'
     end
   end
-  -- Changing muted status
-  if ismuted == "yes" then
-    curr_icon = icons.no_sound
+  if ismuted == "no" then
+    local sound_level = Capture("amixer get Master | egrep -o '[0-9]{1,3}%'",true)
+    -- Changing volume num
+    for w in string.gmatch(sound_level,'[0-9]+')do
+      textW.markup = w..'%'
+      if tonumber(w) <= 100 and tonumber(w) > 66 then
+        volume_s:get_all_children()[1].image = icons.sound_high
+      elseif tonumber(w) <= 66 and tonumber(w) > 33 then
+        volume_s:get_all_children()[1].image = icons.sound_med
+      elseif tonumber(w) <= 33 and tonumber(w) > 0 then
+        volume_s:get_all_children()[1].image = icons.sound_min
+      else 
+        volume_s:get_all_children()[1].image = icons.no_sound
+      end
+    end
   end
-  volume_s:get_all_children()[1].image = curr_icon
-end)
+end
+
+UpdateVolume()
 
 return _M
