@@ -13,16 +13,16 @@ local batteryW = require("Widgets.battery.main")
 local volumeW = require("Widgets.volume.main")
 local brightnessW = require("Widgets.brightness.main")
 local net = require("Widgets.net.main")
-local runPromtW = require("Widgets.prompt.promptWidget")
 local tasklistW = require("Widgets.tasklist.tasklistWidget")
 local taglistW = require("Widgets.taglist.taglistWidget")
-local naughty = require("naughty")
+require("Widgets.prompt.promptWidget")
 require("Widgets.panel.panel_powerline")
 require("Widgets.mainmenu.apps")
 require("Widgets.mainmenu.sys_action")
 require("Widgets.mainmenu.settings")
 require("awful.hotkeys_popup.keys")
 require("awful.autofocus")
+
 
 
 
@@ -205,14 +205,14 @@ globalkeys = gears.table.join(
     -- Runprompt - tags and task switcher
     awful.key({ modkey },            "r",
       function()
+        Run_prompt()
         if NavigationmenuW.isSwitched == false then
-          NavigationmenuW.widget:insert(1,runPromtW)
+          awful.screen.focused{opt=true}.prompt.visible = true
           NavigationmenuW.widget:remove_widgets(taglistW)
           NavigationmenuW.widget:remove_widgets(tasklistW)
           NavigationmenuW.isSwitched = true
-          Run_prompt()
         else
-          NavigationmenuW.widget:remove_widgets(runPromtW)
+          awful.screen.focused{opt=true}.prompt.visible = false
           NavigationmenuW.widget:insert(1,taglistW)
           NavigationmenuW.widget:insert(2,tasklistW)
           NavigationmenuW.isSwitched = false

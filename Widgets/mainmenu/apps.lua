@@ -73,7 +73,7 @@ end
 -- Set up visible effects
 local function proccedAppGUI()
   -- First of all set default values for all
-  for it,ch in ipairs(AppsByItSelf:get_children_by_id("place_container")[1]:get_children()) do
+  for _,ch in ipairs(AppsByItSelf:get_children_by_id("place_container")[1]:get_children()) do
     ch.forced_width = 50
     ch.bg = user_var.app_still
     ch.shape = gears.shape.transform(gears.shape.powerline)

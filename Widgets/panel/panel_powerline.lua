@@ -15,12 +15,9 @@ local brightnessW = require("Widgets.brightness.main")
 local net = require("Widgets.net.main")
 local tasklistW = require("Widgets.tasklist.tasklistWidget")
 local taglistW = require("Widgets.taglist.taglistWidget")
-local runPromtW = require("Widgets.prompt.promptWidget")
 
 
 beautiful.init(gears.filesystem.get_configuration_dir().."Theme/theme.lua")
-
-
 
 
 local arrow = wibox.widget({
@@ -39,7 +36,6 @@ local gap_expandW = wibox.widget({
     layout = wibox.layout.align.horizontal,
 })
 
-dofile(gfs.get_configuration_dir() .. "Widgets/prompt/promptWidget.lua")
 
 -- Till panel_powerline not returning anything, it for debuging purposed will be global
 NavigationmenuW = {

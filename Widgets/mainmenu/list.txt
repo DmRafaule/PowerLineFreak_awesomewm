@@ -3,7 +3,6 @@ gimp.png
 thunar.png
 kitty.png
 galculator.png
-telegram-desktop.png
 virt-manager.png
 nomacs.png
 xreader.png

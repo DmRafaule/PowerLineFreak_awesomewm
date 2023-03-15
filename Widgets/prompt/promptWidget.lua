@@ -3,10 +3,10 @@ local wibox = require("wibox")
 local io    = require("io")
 local gears = require("gears")
 local user_var = require("Theme.user_var")
-local beautiful = require("beautiful")
-local naughty = require("naughty")
+local tasklistW = require("Widgets.tasklist.tasklistWidget")
+local taglistW = require("Widgets.taglist.taglistWidget")
 
-beautiful.init(gears.filesystem.get_configuration_dir().."Theme/theme.lua")
+
 
 -- For filling up list by all programm and sripts in system using $PATH env var
 local function getAvailProg() 
@@ -51,6 +51,13 @@ end
 
 local min_width = 200
 local shift = 1
+
+local H = 25
+local W = 200
+local BW = 2
+local X = 0
+local Y = awful.screen.focused{opt=true}.workarea.height - H - 2 * BW 
+
 -- This is just invisible, make it empty
 -- Table with wiboxes(for available command)
 local prompt_wibox_table = {}
@@ -75,26 +82,30 @@ for i=0,5,1 do
   }))
 end
 -- Counter for matches
-local w_counter = wibox.widget({
-  {
-      {
-          forced_width = 50,
-          font = user_var.font,
-          widget = wibox.widget.textbox,
-      },
-      left  = 20,
-      right = 10,
-      widget = wibox.container.margin
-  },
-  shape_border_width = 0,
-  shape_border_color = user_var.runprmpt_counter_brd,
+local w_counter = wibox({
+  visible = false,
+  width = 100,
+  height = H,
+  border_width = BW,
+  border_color = user_var.runprmpt_counter_brd,
   bg = user_var.runprmpt_counter_b,
   fg = user_var.runprmpt_counter_f,
   shape = function (cr,width,height)
     gears.shape.powerline(cr,width,height)
   end,
-  id = "runprompt_counterW_container",
-  widget = wibox.container.background
+  ontop = true,
+  screen = awful.screen.focused(),
+  widget = wibox.widget{
+    {
+      id = "actualText",
+      forced_width = 50,
+      font = user_var.font,
+      widget = wibox.widget.textbox(),
+    },
+    left  = 20,
+    right = 10,
+    widget = wibox.container.margin
+  }
 })
 
 
@@ -105,16 +116,15 @@ local mypromptbox = awful.widget.prompt({ -- Move to Widgets
     autoexec = true,
     -- Calls when hit esc
     done_callback = function ()
-        for _,wib in ipairs(prompt_wibox_table) do
-          wib.visible = false
-        end
-        w_counter.visible = false
-        -- Switch tasklist and taglist to runprompt and backwards
-        --s.prompt_wibox.visible = false
+      for _,wib in ipairs(prompt_wibox_table) do
+        wib.visible = false
+      end
+      awful.screen.focused{opt=true}.prompt.visible = false
+      NavigationmenuW.widget:insert(1,taglistW)
+      NavigationmenuW.widget:insert(2,tasklistW)
+      NavigationmenuW.isSwitched = false
+      w_counter.visible = false
     end,
-    keypressed_callback = function (mod,key,command) end,
-    keyreleased_callback = function () end,
-    changed_callback = function () end,
     completion_callback = function (command_bCur, cur_pos, counter)
       local list = getSimilarProg(command_bCur) -- List of all match commands
       local pos_for_w_counter -- Position for counter
@@ -126,8 +136,8 @@ local mypromptbox = awful.widget.prompt({ -- Move to Widgets
         res = list[counter]
         for i,wib in ipairs(prompt_wibox_table) do
           -- Set Position
-          wib.x = awful.screen.focused().prompt_wibox.width * i - 10*i - 25
-          wib.y = awful.screen.focused().prompt_wibox.y
+          wib.x = W * i - 10*i
+          wib.y = Y
           -- Set Text, Visibility, and Highliting
           if (i <= #list) then        
               wib.visible = true
@@ -150,9 +160,8 @@ local mypromptbox = awful.widget.prompt({ -- Move to Widgets
           end
           -- Set position for counter
           if i <= #list then
-            pos_for_w_counter = awful.screen.focused().prompt_wibox.width * i - 10*i - 25
+            pos_for_w_counter = W * i - 10*i
           end
-          
         end
         -- Shift control flow
         if (counter > #prompt_wibox_table and shift < #list - #prompt_wibox_table) then
@@ -162,37 +171,37 @@ local mypromptbox = awful.widget.prompt({ -- Move to Widgets
         end
         -- Set counter
         w_counter.visible = true
-        w_counter.x = pos_for_w_counter + min_width - 10
-        w_counter.y = awful.screen.focused().prompt_wibox.y
-        w_counter.widget.markup = "   <b>"..counter.."/"..#list.."</b>"
+        w_counter.x = X + pos_for_w_counter + min_width - 10
+        w_counter.y = Y
+        w_counter.widget:get_children_by_id("actualText")[1].markup = "<b>"..counter.."/"..#list.."</b>"
       end
       return res, cur_pos+size, res
     end
 })
 
 
-local _M = wibox.widget{
-  {
-    mypromptbox,
-    halign = 'center',
-    widget = wibox.container.place
-  },
-  shape_border_width = 2,
-  shape_border_color = user_var.tasker_brd,
-  fg = user_var.runprmpt_f,
-  bg = user_var.runprmpt_bg,
-  shape = gears.shape.transform(gears.shape.rectangular_tag)
-              : scale(-1,1)
-                  : translate(-170,0),
-  id = 'quit',
-  forced_width = 175,
-  widget = wibox.container.background
-}
+awful.screen.connect_for_each_screen(function(s)
+  s.prompt = wibox{
+    x = X,
+    y = Y,
+    visible = false,
+    border_width = BW,
+    border_color = user_var.tasker_brd,
+    fg = user_var.runprmpt_f,
+    bg = user_var.runprmpt_bg,
+    shape = gears.shape.transform(gears.shape.rectangular_tag)
+                : scale(-1,1)
+                    : translate(-W,0),
+    id = 'quit',
+    width = W,
+    height = H,
+    ontop = true,
+    widget = mypromptbox,
+  }
 
-function Run_prompt() 
+end)
+
+function Run_prompt()
   mypromptbox:run()
 end
-
-
-return _M
 

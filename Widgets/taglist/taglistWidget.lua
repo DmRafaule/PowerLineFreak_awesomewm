@@ -6,7 +6,11 @@ require("awful.autofocus")
 local wibox = require("wibox")
 -- Theme handling library
 local gfs = require("gears.filesystem")
-local user_var = dofile(gfs.get_configuration_dir() .. "Theme/user_var.lua")
+local user_var = require("Theme.user_var")
+-- This is needed beacause some icons have to be reloaded(otherwise plane text){{{
+local beautiful = require("beautiful")
+beautiful.init(gears.filesystem.get_configuration_dir().."Theme/theme.lua")
+-- }}}
 
 
 local taglist_buttons = gears.table.join(
