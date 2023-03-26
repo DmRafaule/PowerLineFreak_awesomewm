@@ -52,7 +52,7 @@ function UpdateBrightness()
     local to    = 100 - 100/12*(i-1)
     if level > from and level <= to then
       local res = 12 - (i - 1) 
-      brightness_s:get_all_children()[1].image = confDir .."Pictures/Icons/brightness"..tostring(res)..".png" 
+      brightness_s:get_all_children()[1].image = icons.brightness_folder..tostring(res)..".png" 
     end
   end
 end
