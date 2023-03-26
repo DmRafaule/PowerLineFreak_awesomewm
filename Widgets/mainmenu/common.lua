@@ -4,6 +4,8 @@ require("Widgets.panel.panel_powerline")
 IsActiveApps = false
 IsActiveSettings = false
 IsActiveSys = false
+local MainMenuList = {"app", "set", "sys"}
+local MainMenuList_CurrentIndex = 0
 
 -- Remove all mainmenu related widgets from main wibar
 function MainMenu_Clear()
@@ -14,6 +16,25 @@ function MainMenu_Clear()
     StatusmenuW.widget:remove_widgets(ShutdownW)
 end
 -- Switch between buttons
+function MainMenu_SwitchNext()
+  MainMenuList_CurrentIndex = MainMenuList_CurrentIndex + 1
+  if MainMenuList_CurrentIndex > #MainMenuList then
+    MainMenuList_CurrentIndex = 1
+  end
+  return MainMenuList_CurrentIndex
+end
+
+function MainMenu_SwitchPrev()
+  MainMenuList_CurrentIndex = MainMenuList_CurrentIndex - 1
+  if MainMenuList_CurrentIndex < 1 then
+    MainMenuList_CurrentIndex = #MainMenuList
+  end
+  return MainMenuList_CurrentIndex
+end
+
+function MainMenu_RunCurrent()
+  MainMenu_Switcher(MainMenuList[MainMenuList_CurrentIndex])
+end
 function MainMenu_Switcher(toswitch)
     local currActive = false
     if toswitch == "app" then

@@ -3,8 +3,8 @@ local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
 local beautiful = require("beautiful")
-local gfs = require("gears.filesystem")
-local user_var = require("Theme.user_var")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
 local timeW = require("Widgets.time.timeWidget")
 local kl = require("Widgets.keyboard_layout.kl")
 local systrayW = require("Widgets.systray.systrayWidget")
@@ -17,7 +17,7 @@ local tasklistW = require("Widgets.tasklist.tasklistWidget")
 local taglistW = require("Widgets.taglist.taglistWidget")
 
 
-beautiful.init(gears.filesystem.get_configuration_dir().."Theme/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir().."Themes/"..common.theme.."/theme.lua")
 
 
 local arrow = wibox.widget({
@@ -25,7 +25,7 @@ local arrow = wibox.widget({
         markup = '<b></b>',
         widget = wibox.widget.textbox
     },
-    bg = user_var.layout_b,
+    bg = colors.layout_b,
     shape = gears.shape.transform(gears.shape.powerline)
                 : scale(-1,1)
                     : translate(-20,0),
@@ -72,7 +72,7 @@ awful.screen.connect_for_each_screen(function(s)
     s.main_wibox = awful.wibar({
         position = "bottom",
         screen = s,
-        bg = user_var.wibox_b,
+        bg = colors.wibox_b,
     })
     s.main_wibox:setup {
         NavigationmenuW.widget,

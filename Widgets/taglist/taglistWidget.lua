@@ -5,11 +5,11 @@ require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
-local gfs = require("gears.filesystem")
-local user_var = require("Theme.user_var")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
 -- This is needed beacause some icons have to be reloaded(otherwise plane text){{{
 local beautiful = require("beautiful")
-beautiful.init(gears.filesystem.get_configuration_dir().."Theme/theme.lua")
+beautiful.init(gears.filesystem.get_configuration_dir().."Themes/"..common.theme.."/theme.lua")
 -- }}}
 
 
@@ -35,11 +35,11 @@ local mytaglist = awful.widget.taglist {
     filter  = awful.widget.taglist.filter.all,
     style   = {
         shape = gears.shape.powerline,
-        bg_focus = user_var.taglist_s,
-        bg_volatile = user_var.taglist_ns,
-        bg_empty = user_var.taglist_ns,
-        bg_urgent = user_var.taglist_ns,
-        bg_occupied = user_var.taglist_ns,
+        bg_focus = colors.taglist_s,
+        bg_volatile = colors.taglist_ns,
+        bg_empty = colors.taglist_ns,
+        bg_urgent = colors.taglist_ns,
+        bg_occupied = colors.taglist_ns,
     },
     layout   = {
         spacing = -20,

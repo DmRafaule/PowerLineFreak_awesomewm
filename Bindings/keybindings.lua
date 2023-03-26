@@ -1,20 +1,19 @@
-local gears = require("gears")
-local awful = require("awful")
+local gears         = require("gears")
+local awful         = require("awful")
 local hotkeys_popup = require("awful.hotkeys_popup").widget
-local gfs = require("gears.filesystem")
-local user_var = dofile(gfs.get_configuration_dir() .. "Theme/user_var.lua")
-local kl = require("Widgets.keyboard_layout.kbdcfg")
-local modkey = user_var.modkey
-local timeW = require("Widgets.time.timeWidget")
-local klW = require("Widgets.keyboard_layout.kl")
-local systrayW = require("Widgets.systray.systrayWidget")
-local layoutBoxW = require("Widgets.work_layout.layoutWidget")
-local batteryW = require("Widgets.battery.main")
-local volumeW = require("Widgets.volume.main")
-local brightnessW = require("Widgets.brightness.main")
-local net = require("Widgets.net.main")
-local tasklistW = require("Widgets.tasklist.tasklistWidget")
-local taglistW = require("Widgets.taglist.taglistWidget")
+local common        = require("Themes.common")
+local colors        = require("Themes."..common.theme..".colors")
+local kl            = require("Widgets.keyboard_layout.kbdcfg")
+local timeW         = require("Widgets.time.timeWidget")
+local klW           = require("Widgets.keyboard_layout.kl")
+local systrayW      = require("Widgets.systray.systrayWidget")
+local layoutBoxW    = require("Widgets.work_layout.layoutWidget")
+local batteryW      = require("Widgets.battery.main")
+local volumeW       = require("Widgets.volume.main")
+local brightnessW   = require("Widgets.brightness.main")
+local net           = require("Widgets.net.main")
+local tasklistW     = require("Widgets.tasklist.tasklistWidget")
+local taglistW      = require("Widgets.taglist.taglistWidget")
 require("Widgets.prompt.promptWidget")
 require("Widgets.panel.panel_powerline")
 require("Widgets.mainmenu.apps")
@@ -24,6 +23,7 @@ require("awful.hotkeys_popup.keys")
 require("awful.autofocus")
 
 
+local modkey = common.modkey
 
 
 -- Mouse bindings
@@ -74,19 +74,74 @@ globalkeys = gears.table.join(
     -- Next app
     awful.key({modkey}, "9",
       function ()
-        GPrevApp()
+        if IsActiveApps then
+          GPrevApp()
+        elseif IsActiveSettings then
+          GNextSettOpt()
+        elseif IsActiveSys then
+          GNextSysAct()
+        else
+          local curr = MainMenu_SwitchPrev()
+          AppsW.bg = colors.layout_b
+          SettingsW.bg = colors.widget_b
+          SysActionW.bg = colors.time_b
+          if curr == 1 then
+            AppsW.bg = colors.layout_b_hovered
+            SettingsW.bg = colors.widget_b
+            SysActionW.bg = colors.time_b
+          elseif curr == 2 then
+            AppsW.bg = colors.layout_b
+            SettingsW.bg = colors.widget_b_hovered
+            SysActionW.bg = colors.time_b
+          else
+            AppsW.bg = colors.layout_b
+            SettingsW.bg = colors.widget_b
+            SysActionW.bg = colors.time_b_hovered
+          end
+        end
       end,
-      {description = "shift app switcher to left", group = "client"}
+      {description = "shift to right el in mainmenu widget", group = "client"}
     ),
     awful.key({modkey}, "0",
       function ()
-        GNextApp()
+        if IsActiveApps then
+          GNextApp()
+        elseif IsActiveSettings then
+          GNextSettOpt()
+        elseif IsActiveSys then
+          GNextSysAct()
+        else
+          local curr = MainMenu_SwitchNext()
+          AppsW.bg = colors.layout_b
+          SettingsW.bg = colors.widget_b
+          SysActionW.bg = colors.time_b
+          if curr == 1 then
+            AppsW.bg = colors.layout_b_hovered
+            SettingsW.bg = colors.widget_b
+            SysActionW.bg = colors.time_b
+          elseif curr == 2 then
+            AppsW.bg = colors.layout_b
+            SettingsW.bg = colors.widget_b_hovered
+            SysActionW.bg = colors.time_b
+          else
+            AppsW.bg = colors.layout_b
+            SettingsW.bg = colors.widget_b
+            SysActionW.bg = colors.time_b_hovered
+          end
+        end
       end,
-      {description = "shift app switcher to left", group = "client"}
+      {description = "shift to right el in mainmenu widget", group = "client"}
     ),
     awful.key({modkey}, "e",
       function ()
-        GRunApp()
+        if IsActiveApps then
+          GRunApp()
+        elseif IsActiveSettings then
+          GRunSettOpt()
+        elseif IsActiveSys then
+          GRunSysAct()
+        end
+        MainMenu_RunCurrent()
       end,
       {description = "run app", group = "client"}
     ),
@@ -124,7 +179,7 @@ globalkeys = gears.table.join(
           StatusmenuW.widget:insert(4,AppsW)
           StatusmenuW.widget:insert(5,SettingsW)
           StatusmenuW.widget:insert(6,SysActionW)
-          StatusmenuW.isSwitched = true        
+          StatusmenuW.isSwitched = true
         else
           MainMenu_Clear()
           StatusmenuW.widget:remove_widgets(AppsW)
@@ -138,19 +193,19 @@ globalkeys = gears.table.join(
           StatusmenuW.widget:insert(9,batteryW)
           StatusmenuW.widget:insert(10,timeW)
           StatusmenuW.widget:insert(11,layoutBoxW)
-          StatusmenuW.isSwitched = false        
+          StatusmenuW.isSwitched = false
         end
       end,
       {description = "Open main launcher", group = "launcher"}
     ),
     -- Standard program
-    awful.key({ modkey,           }, "t", function () awful.spawn(user_var.terminal) end,
+    awful.key({ modkey,           }, "t", function () awful.spawn(common.terminal) end,
               {description = "open a terminal", group = "launcher"}),
-    awful.key({ modkey,           }, "c", function () awful.spawn.with_shell("kitty "..user_var.editor) end,
-              {description = "open a code editor", group = "launcher"}),              
-    awful.key({ modkey,           }, "b", function () awful.spawn(user_var.browser) end,
+    awful.key({ modkey,           }, "c", function () awful.spawn.with_shell("kitty "..common.editor) end,
+              {description = "open a code editor", group = "launcher"}),
+    awful.key({ modkey,           }, "b", function () awful.spawn(common.browser) end,
               {description = "open a default browser", group = "launcher"}),
-    awful.key({ modkey,           }, "m", function () awful.spawn(user_var.fm) end,
+    awful.key({ modkey,           }, "m", function () awful.spawn(common.fm) end,
               {description = "open a file manager", group = "launcher"}),
     awful.key({ }, "Print", function ()
       awful.spawn.with_shell("scrot --file '/home/dima/Pictures/screenshot-%Y_%m_%d-%H_%M.png' -q 100")

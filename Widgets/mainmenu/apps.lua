@@ -2,8 +2,9 @@ local awful = require("awful")
 local gfs = require("gears.filesystem")
 local wibox = require("wibox")
 local gears = require("gears")
-local user_var= require("Theme.user_var")
-local naughty = require("naughty")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
+local icons = require("Themes."..common.theme..".icons")
 require("Widgets.mainmenu.common")
 
 
@@ -23,14 +24,14 @@ AppsByItSelf = wibox.widget({
 AppsW = wibox.widget{
   {
       {
-          image  = user_var.apps,
+          image  = icons.apps,
           resize = true,
           widget = wibox.widget.imagebox
       },
       halign = 'center',
       widget = wibox.container.place
   },
-  bg = user_var.layout_b,
+  bg = colors.layout_b,
   shape = gears.shape.transform(gears.shape.powerline) 
               : scale(-1,1)
                   : translate(-75,0),
@@ -39,8 +40,8 @@ AppsW = wibox.widget{
   widget = wibox.container.background
 }
 
-AppsW:connect_signal('mouse::enter',function(c) c:set_bg(user_var.layout_b_hovered) end)
-AppsW:connect_signal("mouse::leave", function(c) c:set_bg(user_var.layout_b) end)
+AppsW:connect_signal('mouse::enter',function(c) c:set_bg(colors.layout_b_hovered) end)
+AppsW:connect_signal("mouse::leave", function(c) c:set_bg(colors.layout_b) end)
 AppsW:connect_signal("button::press", function ()
     MainMenu_Switcher("app")
 end)
@@ -75,7 +76,7 @@ local function proccedAppGUI()
   -- First of all set default values for all
   for _,ch in ipairs(AppsByItSelf:get_children_by_id("place_container")[1]:get_children()) do
     ch.forced_width = 50
-    ch.bg = user_var.app_still
+    ch.bg = colors.app_still
     ch.shape = gears.shape.transform(gears.shape.powerline)
                 : scale(-1,1)
                     : translate(-50,0)
@@ -83,7 +84,7 @@ local function proccedAppGUI()
   -- Now set selected values for chosen one
   local ls = AppsByItSelf:get_children_by_id("place_container")[1]:get_children()[INIT_APP_INDX]
   ls.forced_width = 100
-  ls.bg = user_var.app_selected
+  ls.bg = colors.app_selected
   ls.shape = gears.shape.transform(gears.shape.powerline)
               : scale(-1,1)
                   : translate(-100,0)
@@ -115,7 +116,7 @@ for it, app in ipairs(getApps()) do
             halign = 'center',
             widget = wibox.container.place
         },
-        bg = user_var.app_still,
+        bg = colors.app_still,
         shape = gears.shape.transform(gears.shape.powerline) 
                     : scale(-1,1)
                         : translate(-50,0),
@@ -124,7 +125,7 @@ for it, app in ipairs(getApps()) do
     })
     widget:connect_signal("button::press", function ()
       widget.forced_width = 50
-      widget.bg = user_var.app_hoverd
+      widget.bg = colors.app_hoverd
       widget.shape = gears.shape.transform(gears.shape.powerline) 
             : scale(-1,1)
                 : translate(-50,0)
@@ -132,14 +133,14 @@ for it, app in ipairs(getApps()) do
     end)
     widget:connect_signal("mouse::enter", function ()
       widget.forced_width = 100
-      widget.bg = user_var.app_selected
+      widget.bg = colors.app_selected
       widget.shape = gears.shape.transform(gears.shape.powerline) 
             : scale(-1,1)
                 : translate(-100,0)
     end)
     widget:connect_signal("mouse::leave", function ()
       widget.forced_width = 50
-      widget.bg = user_var.app_still
+      widget.bg = colors.app_still
       widget.shape = gears.shape.transform(gears.shape.powerline) 
             : scale(-1,1)
                 : translate(-50,0)
@@ -152,32 +153,26 @@ end
 currApp = apps[INIT_APP_INDX]
 local ls = AppsByItSelf:get_children_by_id("place_container")[1]:get_children()[INIT_APP_INDX]
 ls.forced_width = 100
-ls.bg = user_var.app_selected
+ls.bg = colors.app_selected
 ls.shape = gears.shape.transform(gears.shape.powerline) 
             : scale(-1,1)
                 : translate(-100,0)
 
 -- Select next one app
 function GNextApp()
-  if IsActiveApps == true then
     for it = 1, appsNumber, 1 do
       AppsByItSelf:get_children_by_id("place_container")[1]:swap(it,it+1)
     end
     currApp = getCurrentApp(1)
-  end
 end
 -- Select previouse one app
 function GPrevApp()
-  if IsActiveApps == true then
     for it = appsNumber, 1, -1 do
       AppsByItSelf:get_children_by_id("place_container")[1]:swap(it,it-1)
     end
     currApp = getCurrentApp(-1)
-  end
 end
 -- Run current selected app/command
 function GRunApp()
-  if IsActiveApps == true then
     awful.spawn.with_shell(extractAppName(currApp))
-  end
 end

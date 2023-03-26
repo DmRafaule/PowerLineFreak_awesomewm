@@ -5,7 +5,8 @@ require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
 -- Theme handling library
-local user_var  = require("Theme.user_var")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
 
 local tasklist_buttons = gears.table.join(
   awful.button({ }, 1, function (c)
@@ -36,16 +37,16 @@ local mytasklist = awful.widget.tasklist {
     buttons  = tasklist_buttons,
     style    = {
         shape_border_width = 2,
-        shape_border_color = user_var.tasker_brd,
+        shape_border_color = colors.tasker_brd,
         shape  = gears.shape.powerline,
     },
     layout   = {
         spacing = -20,
         spacing_widget = {
             {
-                shape        = gears.shape.powerline,
-                color = user_var.tasker_separator,
-                widget       = wibox.widget.separator
+                shape = gears.shape.powerline,
+                color = colors.tasker_separator,
+                widget = wibox.widget.separator
             },
             valign = 'center',
             halign = 'right',

@@ -3,7 +3,7 @@ local awful = require("awful")
 require("awful.autofocus")
 -- Theme handling library
 local beautiful = require("beautiful")
-local user_var  = require("Theme.user_var")
+local common  = require("Themes.common")
 
 
 
@@ -24,7 +24,7 @@ awful.rules.rules = {
         buttons = clientbuttons,
         screen = awful.screen.preferred,
         placement = awful.placement.no_overlap+awful.placement.no_offscreen
-      } 
+      }
     },
     -- Floating clients.
     {
@@ -40,7 +40,7 @@ awful.rules.rules = {
     },
     -- Default clients in tags
     {
-      rule_any = { class = {user_var.browser,} },
+      rule_any = { class = {common.browser,} },
       properties = { tag = "Exploration", }
     }
 }

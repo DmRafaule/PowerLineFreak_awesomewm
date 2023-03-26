@@ -4,16 +4,17 @@ local wibox = require("wibox")
 local gears = require("gears")
 require("awful.autofocus")
 -- Theme handling library
-local gfs = require("gears.filesystem")
-local user_var = dofile(gfs.get_configuration_dir() .. "Theme/user_var.lua")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
+local icons = require("Themes."..common.theme..".icons")
 require("Widgets.keyboard_layout.kbdcfg")
 
 
 -- Keyboard map indicator and MainMenu_Switcher
 local	kl = kbdcfg({type = "gui"})
 
-kl.add_primary_layout("English", user_var.us_layout_icon, "us")
-kl.add_primary_layout("Русский", user_var.ru_layout_icon, "ru")
+kl.add_primary_layout("English", icons.us_layout_icon, "us")
+kl.add_primary_layout("Русский", icons.ru_layout_icon, "ru")
 
 kl.bind()
 
@@ -32,7 +33,7 @@ local _M = wibox.widget({
           halign = 'center',
           widget = wibox.container.place
       },
-      bg = user_var.layout_b,
+      bg = colors.layout_b,
       shape = gears.shape.transform(gears.shape.powerline)
                   : scale(-1,1)
                       : translate(-75,0),

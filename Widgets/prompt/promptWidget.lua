@@ -2,10 +2,10 @@ local awful = require("awful")
 local wibox = require("wibox")
 local io    = require("io")
 local gears = require("gears")
-local user_var = require("Theme.user_var")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
 local tasklistW = require("Widgets.tasklist.tasklistWidget")
 local taglistW = require("Widgets.taglist.taglistWidget")
-
 
 
 -- For filling up list by all programm and sripts in system using $PATH env var
@@ -67,12 +67,11 @@ for i=0,5,1 do
     y = 0,
     visible = false,
     width = min_width,
-    font = user_var.font,
     height = 30,
     border_width = 0,
-    border_color = user_var.runprmpt_choise_brd,
-    bg = user_var.runprmpt_choise_bg,
-    fg = user_var.runprmpt_choise_f,
+    border_color = colors.runprmpt_choise_brd,
+    bg = colors.runprmpt_choise_bg,
+    fg = colors.runprmpt_choise_f,
     ontop = true,
     shape = function (cr,width,height)
       gears.shape.powerline(cr,width,height)
@@ -87,9 +86,9 @@ local w_counter = wibox({
   width = 100,
   height = H,
   border_width = BW,
-  border_color = user_var.runprmpt_counter_brd,
-  bg = user_var.runprmpt_counter_b,
-  fg = user_var.runprmpt_counter_f,
+  border_color = colors.runprmpt_counter_brd,
+  bg = colors.runprmpt_counter_b,
+  fg = colors.runprmpt_counter_f,
   shape = function (cr,width,height)
     gears.shape.powerline(cr,width,height)
   end,
@@ -99,7 +98,6 @@ local w_counter = wibox({
     {
       id = "actualText",
       forced_width = 50,
-      font = user_var.font,
       widget = wibox.widget.textbox(),
     },
     left  = 20,
@@ -111,8 +109,8 @@ local w_counter = wibox({
 
 local mypromptbox = awful.widget.prompt({ -- Move to Widgets
     prompt = '<b>$: </b>',
-    bg_cursor = user_var.runprmpt_cursor,
-    fg = user_var.runprmpt_f,
+    bg_cursor = colors.runprmpt_cursor,
+    fg = colors.runprmpt_f,
     autoexec = true,
     -- Calls when hit esc
     done_callback = function ()
@@ -143,9 +141,9 @@ local mypromptbox = awful.widget.prompt({ -- Move to Widgets
               wib.visible = true
               wib.widget.markup = "\t<b>"..list[i].."</b>"
               if (i == counter) then
-                wib.bg = user_var.runprmpt_choise_s
+                wib.bg = colors.runprmpt_choise_s
               else
-                wib.bg = user_var.runprmpt_choise_ns
+                wib.bg = colors.runprmpt_choise_ns
               end
           -- If we have some unneeded wiboxes we will not display them
           else
@@ -156,7 +154,7 @@ local mypromptbox = awful.widget.prompt({ -- Move to Widgets
             -- Make a shift
             wib.widget.markup = "\t<b>"..list[i+shift].."</b>"
             -- Just mark a last one for sure.
-            prompt_wibox_table[#prompt_wibox_table].bg = user_var.runprmpt_choise_s
+            prompt_wibox_table[#prompt_wibox_table].bg = colors.runprmpt_choise_s
           end
           -- Set position for counter
           if i <= #list then
@@ -186,9 +184,9 @@ awful.screen.connect_for_each_screen(function(s)
     y = Y,
     visible = false,
     border_width = BW,
-    border_color = user_var.tasker_brd,
-    fg = user_var.runprmpt_f,
-    bg = user_var.runprmpt_bg,
+    border_color = colors.tasker_brd,
+    fg = colors.runprmpt_f,
+    bg = colors.runprmpt_bg,
     shape = gears.shape.transform(gears.shape.rectangular_tag)
                 : scale(-1,1)
                     : translate(-W,0),

@@ -1,9 +1,9 @@
 local wibox = require("wibox")
-local colors = require("Theme.colors")
-local icons = require("Theme.icons")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
+local icons = require("Themes."..common.theme..".icons")
 local gears = require("gears")
 require("Utils.cli")
-local naughty = require("naughty")
 
 local textW = wibox.widget{
     align  = 'center',
@@ -20,21 +20,6 @@ local volume_s = wibox.widget{
     },
     layout = wibox.container.place
 }
-local progressBarW = wibox.widget({
-  max_value     = 100,
-  value         = 0,
-  shape = gears.shape.transform(gears.shape.powerline)
-                  : scale(-1,1)
-                      : translate(-60,0),
-  background_color =  colors.volu_background,
-  opacity = 1,
-  bar_shape  = gears.shape.transform(gears.shape.powerline)
-                  : scale(-1,1)
-                      : translate(-60,0),
-  border_color  = colors.volu_borders,
-  border_width = 4,
-  widget = wibox.widget.progressbar
-})
 local la = wibox.widget({
     volume_s,
     layout  = wibox.layout.stack

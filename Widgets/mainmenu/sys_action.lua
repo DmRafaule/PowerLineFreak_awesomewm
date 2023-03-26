@@ -1,7 +1,9 @@
 local awful = require("awful")
 local wibox = require("wibox")
 local gears = require("gears")
-local user_var = require("Theme.user_var")
+local common = require("Themes.common")
+local colors = require("Themes."..common.theme..".colors")
+local icons = require("Themes."..common.theme..".icons")
 require("Widgets.mainmenu.common")
 
 
@@ -10,14 +12,14 @@ require("Widgets.mainmenu.common")
 RebootW = wibox.widget{
         {
             {
-                image  = user_var.reboot_icon,
+                image  = icons.reboot_icon,
                 resize = true,
                 widget = wibox.widget.imagebox
             },
             halign = 'center',
             widget = wibox.container.place
         },
-        bg = user_var.time_b,
+        bg = colors.time_b,
         shape = gears.shape.rectangular_tag,
         id = 'reboot',
         forced_width = 75,
@@ -27,14 +29,14 @@ RebootW = wibox.widget{
 ShutdownW = wibox.widget{
         {
             {
-                image  = user_var.shutdown_icon,
+                image  = icons.shutdown_icon,
                 resize = true,
                 widget = wibox.widget.imagebox
             },
             halign = 'center',
             widget = wibox.container.place
         },
-        bg = user_var.time_b,
+        bg = colors.time_b,
         shape = gears.shape.rectangular_tag,
         id = 'shutdown',
         forced_width = 75,
@@ -44,14 +46,14 @@ ShutdownW = wibox.widget{
 SysActionW = wibox.widget({
     {
         {
-            image  = user_var.arch,
+            image  = icons.arch,
             resize = true,
             widget = wibox.widget.imagebox
         },
         halign = 'center',
         widget = wibox.container.place
     },
-    bg = user_var.time_b,
+    bg = colors.time_b,
     shape = gears.shape.rectangular_tag,
     forced_width = 75,
     id = 'main_but',
@@ -59,19 +61,32 @@ SysActionW = wibox.widget({
 })
 
 
-RebootW:connect_signal('mouse::enter', function (c) c:set_bg(user_var.time_b_hovered) end)
-RebootW:connect_signal('mouse::leave', function (c) c:set_bg(user_var.time_b) end)
+RebootW:connect_signal('mouse::enter', function (c) c:set_bg(colors.time_b_hovered) end)
+RebootW:connect_signal('mouse::leave', function (c) c:set_bg(colors.time_b) end)
 RebootW:connect_signal('button::press', function (c) 
     awful.spawn.with_shell("reboot")
 end)
-ShutdownW:connect_signal('mouse::enter', function (c) c:set_bg(user_var.time_b_hovered) end)
-ShutdownW:connect_signal('mouse::leave', function (c) c:set_bg(user_var.time_b) end)
-ShutdownW:connect_signal('button::press', function (c) 
+ShutdownW:connect_signal('mouse::enter', function (c) c:set_bg(colors.time_b_hovered) end)
+ShutdownW:connect_signal('mouse::leave', function (c) c:set_bg(colors.time_b) end)
+ShutdownW:connect_signal('button::press', function (c)
     awful.spawn.with_shell("shutdown now")
 end)
 
-SysActionW:connect_signal('mouse::enter',function(c) c:set_bg(user_var.time_b_hovered) end)
-SysActionW:connect_signal("mouse::leave", function(c) c:set_bg(user_var.time_b) end)
+SysActionW:connect_signal('mouse::enter',function(c) c:set_bg(colors.time_b_hovered) end)
+SysActionW:connect_signal("mouse::leave", function(c) c:set_bg(colors.time_b) end)
 SysActionW:connect_signal("button::press", function ()
-    MainMenu_Switcher("sys") 
+    MainMenu_Switcher("sys")
 end)
+
+
+
+
+-- Select next one app
+function GNextSysAct()
+end
+-- Select previouse one app
+function GPrevSysAct()
+end
+-- Run current selected app/command
+function GRunSysAct()
+end
