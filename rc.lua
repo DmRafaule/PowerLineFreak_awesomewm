@@ -17,4 +17,5 @@ require("Widgets.widgets")
 -- Add config for rules
 require("Rules.rules")
 
-SetWallpaper("minimalism/archlike5.png")
+-- Change default wallpaper
+--SetWallpaper("minimalism/archlike6.png")

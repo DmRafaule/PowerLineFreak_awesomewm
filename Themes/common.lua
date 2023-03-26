@@ -6,6 +6,5 @@ local _M = {
 	terminal  = "kitty",
 	modkey    = "Mod4",
   theme     = "neon",
-  wallpaper = "minimalism/archlike5.png",
 }
 return _M

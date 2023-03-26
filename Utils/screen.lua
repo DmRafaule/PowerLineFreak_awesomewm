@@ -6,9 +6,10 @@ local common = require "Themes.common"
 
 
 function SetWallpaper( path )
-  path = path or common.wallpaper
-  local wp = gears.filesystem.get_configuration_dir().. "Pictures/Wallpapers/" .. path
-  gears.wallpaper.maximized(wp,nil,true)
+  if path ~= nil then
+    local wp = gears.filesystem.get_configuration_dir().. "Pictures/Wallpapers/" .. path
+    gears.wallpaper.maximized(wp,nil,true)
+  end
 end
 
 -- Set theme for use

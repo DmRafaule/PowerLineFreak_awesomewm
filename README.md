@@ -8,7 +8,7 @@ This is a my custom config for awesome wm.
 * Bindings <- *Key/Mouse bindings*
 * Rules <- *System rules*
 * Signals <- *Handling signals*
-* Theme <- *Colors,shapes,pictures names, ...*
+* Themes <- *Colors,shapes,pictures names, ...*
 * Utils <- *Commonly used utils (func, globals, ...)* 
 * Widgets <- *All used widgets*
 * rc.lua <- *Main*
@@ -31,8 +31,6 @@ In all cases it will be for widgets
 * None *I can't figure out how to make icons with transparent background. Rework required*
 ### taglist
 * None
-### tasker
-* None (not in use)
 ### tasklist
 * None
 ### time

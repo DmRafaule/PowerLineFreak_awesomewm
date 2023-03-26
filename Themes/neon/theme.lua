@@ -4,7 +4,6 @@ local dpi = xresources.apply_dpi
 local xrdb = xresources.get_current_theme()
 local gfs = require("gears.filesystem")
 local themes_path = gfs.get_themes_dir()
-local common = require("Themes.common")
 local colors = require("Themes.neon.colors")
 local icons = require("Themes.neon.icons")
 
@@ -92,7 +91,8 @@ theme.taglist_squares_unsel = theme_assets.taglist_squares_unsel(
     taglist_square_size, theme.fg_normal
 )
 
-theme.wallpaper = gfs.get_configuration_dir().. "Pictures/Wallpapers/" .. common.wallpaper
+theme.wallpaper = gfs.get_configuration_dir().. "Pictures/Wallpapers/minimalism/archlike1.png"
+SetWallpaper("minimalism/archlike1.png")
 
 theme.layout_spiral         = icons.work_layout_spiral
 theme.layout_dwindle        = icons.work_layout_dwindle
