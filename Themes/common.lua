@@ -2,9 +2,9 @@ local _M = {
 	-- Default applications
 	browser   = "firefox",
 	fm        = "thunar",
-	editor    = "nvim",
+	editor    = "code",
 	terminal  = "kitty",
 	modkey    = "Mod4",
-  theme     = "neon",
+   theme     = "neon",
 }
 return _M

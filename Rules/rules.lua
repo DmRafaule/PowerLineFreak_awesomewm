@@ -32,17 +32,29 @@ awful.rules.rules = {
         instance = {
           "galculator",
           "lxappearance",
+          "Unity",
         },
       },
       properties = {
         floating = true,
       }
     },
-    -- Default clients in tags
     {
-      rule_any = { class = {common.browser,} },
-      properties = { tag = "Exploration", }
-    }
+      rule_any = {
+        instance = {
+          "galculator",
+          "nomacs"
+        }
+      },      
+      properties = {
+        ontop = true,
+      }
+    },
+    -- Default clients in tags
+    --{
+    --  rule_any = { class = {common.browser,} },
+    --  properties = { tag = "Exploration", }
+    --}
 }
 
 

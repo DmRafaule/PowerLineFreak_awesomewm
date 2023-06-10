@@ -60,14 +60,14 @@ globalkeys = gears.table.join(
     -- Next wind
     awful.key({ modkey,           }, "j",
         function ()
-            awful.client.focus.byidx( 1)
+            awful.client.focus.byidx(-1)
         end,
         {description = "focus next by index", group = "client"}
     ),
     -- Prev wind
     awful.key({ modkey,           }, "k",
         function ()
-            awful.client.focus.byidx(-1)
+            awful.client.focus.byidx(1)
         end,
         {description = "focus previous by index", group = "client"}
     ),
@@ -279,10 +279,17 @@ globalkeys = gears.table.join(
 clientkeys = gears.table.join(
     awful.key({ modkey,           }, "f",
       function (c)
-          c.fullscreen = not c.fullscreen
+          c.fullscreen = not c.fullscreen 
           c:raise()
       end,
       {description = "toggle fullscreen", group = "client"}
+    ),
+    awful.key({ modkey, "Control" }, "m",
+      function (c)
+        c.maximized = not c.maximized
+        c:raise()
+      end,
+      {description = "toggle maximazed", group = "client"}
     ),
     -- This wierd key combination was get it by using xbindkeys --key and
     -- then pressing button up above f4 key

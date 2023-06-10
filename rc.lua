@@ -18,4 +18,4 @@ require("Widgets.widgets")
 require("Rules.rules")
 
 -- Change default wallpaper
---SetWallpaper("minimalism/archlike6.png")
+SetWallpaper("cubeAssemble.jpg")

@@ -2,6 +2,7 @@ local awful = require("awful")
 local gfs = require("gears.filesystem")
 local wibox = require("wibox")
 local gears = require("gears")
+local naughty = require("naughty")
 local common = require("Themes.common")
 local colors = require("Themes."..common.theme..".colors")
 local icons = require("Themes."..common.theme..".icons")
@@ -51,7 +52,7 @@ end)
 local function getApps()
     local list = {}
     for line in  io.lines(gfs.get_configuration_dir().."Widgets/mainmenu/list.txt") do
-        list[#list+1] = line
+        list[#list + 1] = line
     end
     return list
 end
@@ -89,6 +90,7 @@ local function proccedAppGUI()
               : scale(-1,1)
                   : translate(-100,0)
 end
+
 -- Return current app name
 local function getCurrentApp(shift)
   -- Increase counter
